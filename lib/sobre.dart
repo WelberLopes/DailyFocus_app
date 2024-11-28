@@ -68,10 +68,8 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginApp()), // Tela principal após login
-                    );
+                    // Navega para a tela de login
+                    Navigator.pushNamed(context, LoginApp.tag);
                   },
                   child: const Text(
                     'Ir para Login',
@@ -102,6 +100,52 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SobreTela extends StatelessWidget {
+  const SobreTela({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sobre o App'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Retorna para a tela de boas-vindas
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const WelcomePage()),
+                  (Route<dynamic> route) => false, // Remove todas as rotas anteriores
+            );
+          },
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                'Este aplicativo foi desenvolvido para ajudar os usuários a manter o foco em suas tarefas diárias.',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Através de funcionalidades como listas de tarefas e lembretes buscamos melhorar sua produtividade!',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

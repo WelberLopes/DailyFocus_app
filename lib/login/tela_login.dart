@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:focus_app/home_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:focus_app/initial/cadastro-page.dart';  // Corrigido o import
+import 'package:focus_app/initial/cadastro-page.dart';
+import 'package:focus_app/initial/welcome-page.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -38,6 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
   String _mensagemErro = '';
 
   Future<void> login(String email, String password) async {
+    // Verifica se os campos estão vazios
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _mensagemErro = 'Email e senha são obrigatórios';
+      });
+      return; // Retorna sem continuar a execução do login
+    }
+
     final url = Uri.parse('http://localhost:3000/login'); // URL da API
 
     try {
@@ -51,19 +60,19 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _mensagemErro = 'Login bem-sucedido!';
         });
-        // Redireciona para a tela principal após o login bem-sucedido
+        // Redireciona para a tela principal
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AppTarefas()), // Tela principal após login
         );
       } else {
         setState(() {
-          _mensagemErro = 'Email ou senha incorreto';
+          _mensagemErro = 'Email ou senha incorretos';
         });
       }
     } catch (erro) {
       setState(() {
-        _mensagemErro = 'Erro: $erro';
+        _mensagemErro = 'Erro: Não foi possível se conectar com o servidor';
       });
     }
   }
@@ -71,6 +80,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Retorna para a tela de boas-vindas
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const WelcomePage()),
+                  (Route<dynamic> route) => false, // Remove todas as rotas anteriores
+            );
+          },
+        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -89,9 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Logo
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 60.0,
-                backgroundImage: AssetImage('assets/leon-avatar.jpg'),
+                backgroundImage: NetworkImage(
+                  'https://www.wikihow.com/images/thumb/3/3b/Write-a-Journal-Step-1-Version-2.jpg/v4-728px-Write-a-Journal-Step-1-Version-2.jpg.webp',
+                ),
               ),
               const SizedBox(height: 20),
               // Título
@@ -206,6 +232,17 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tela Principal'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Retorna para a tela de boas-vindas
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const WelcomePage()),
+                  (Route<dynamic> route) => false, // Remove todas as rotas anteriores
+            );
+          },
+        ),
       ),
       body: const Center(
         child: Text(

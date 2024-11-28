@@ -258,7 +258,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              tarefa.titulo,
+                              tarefa.descricao,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
